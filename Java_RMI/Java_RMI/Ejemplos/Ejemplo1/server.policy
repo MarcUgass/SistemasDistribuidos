@@ -1,0 +1,3 @@
+grant codeBase "file:/home/marcugas/Desktop/Java_RMI-main/Ejemplos/" {
+    permission java.security.AllPermission;
+};
