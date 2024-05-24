@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!--<link href="estilo.css" rel="stylesheet" type="text/css">-->
+        <title>Sistema Domotico</title>
+    </head>
+    <body>
+        <h1>Bienvenido al Sistema Domótico</h1>
+        <h2>Actualiza los datos de su hogar:</h2>
+        <div class="clase_sensores">
+            <form id="form1" action="javascript:void(0);" onsubmit="enviar_sensores()">
+                <h3>Introduzca la temperatura actual:</h3>
+                <input type="text" id="temp"><br>
+                <h3>Introduzca el porcentaje de iluminación actual:</h3>
+                <input type="text" id="ilum"><br>
+                <input class="boton_enviar" type="submit" value="Actualizar"/>
+            </form>
+        </div>
+        <div class="clase_actuadores">
+                <label for="interruptor" class="label_interruptor">Activar/Desactivar aire acondicionado:</label>
+                <input type="checkbox" id="interruptorAc" onchange="actualizarbools();">
+
+                <label for="interruptor" class="label_interruptor">Abrir/Cerrar persiana:</label>
+                <input type="checkbox" id="interruptorPers" onchange="actualizarbools();">
+        </div>
+
+        <div id="clase_alertas">
+            <h2>Actualización de alertas:</h2>
+            <div id="mensaje"></div>
+        </div>
+
+        <h2> Historial </h2>
+			<div id="historial"> 
+		</div>
+
+
+    </body>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var serviceURL = document.URL;
+        var socket = io.connect(serviceURL);
+
+        function enviar_sensores() {
+            var val1 = document.getElementById("temp").value;
+            var val2 = document.getElementById("ilum").value;
+
+            if (isNaN(val1) || isNaN(val2) || val1 == "" || val2 == "" || val2 < 0 || val2 > 100 || val1 < -273 || val1 > 100) {
+                alert("Introduzca valores numéricos");
+            } else {
+                socket.emit('sensores', { temp: val1, ilum: val2 });
+
+                document.getElementById("temp").value = "";
+                document.getElementById("ilum").value = "";
+            }
+        }
+
+        function actualizarbools() {
+            var aire = document.getElementById("interruptorAc");
+            var persiana = document.getElementById("interruptorPers");
+
+            socket.emit('actuadores', {AireAC: aire.checked, Ventana: persiana.checked});
+        }
+
+        socket.on('alertas', (data) => {actualizarAlertas(data);});
+        function actualizarAlertas(data) {
+            var alertas = document.getElementById("clase_alertas");
+            var temp = document.getElementById("mensaje");
+            temp.innerHTML = data.mensajeSalida;
+
+        }
+
+        socket.on('historico', function(datos) {
+            var listContainer = document.getElementById('historial');
+            listContainer.innerHTML = '';
+
+            var listElement = document.createElement('ul');
+            listContainer.appendChild(listElement);
+
+            var num = datos.length;
+            for(var i=0; i<num; i++) {
+                var listItem = document.createElement('li');
+                temperatura = JSON.stringify(datos[i].temp);
+                iluminacion = JSON.stringify(datos[i].ilum);
+                fecha = JSON.stringify(datos[i].fecha);
+                listItem.innerHTML = temperatura + "º  " + iluminacion + "%" + "  " + fecha;
+                listElement.appendChild(listItem);
+            }
+        });
+    </script>
+</html>

@@ -1,5 +1,5 @@
 {
-  "name": "practica4",
+  "name": "sistemadomotico",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,9 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "type": "module",
+  "type":"module",
   "dependencies": {
+    "express": "^4.19.2",
     "mongodb": "^6.6.2",
     "socket.io": "^4.7.5"
   }

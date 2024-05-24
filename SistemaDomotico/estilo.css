@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    margin-bottom: 10px;
+}
+
+.clase_sensores {
+    margin-bottom: 20px;
+}
+
+.clase_actuadores {
+    margin-bottom: 20px;
+}
+
+.boton_enviar {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.boton_enviar:hover {
+    background-color: #0056b3;
+}
+
+.label_interruptor {
+    margin-right: 10px;
+}
+
+#clase_alertas {
+    margin-top: 20px;
+}
+
+#temperatura, #iluminacion {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#temperatura {
+    background-color: white;
+}
+
+#iluminacion {
+    background-color: white;
+}
